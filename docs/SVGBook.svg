@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg_book" xmlns="http://www.w3.org/2000/svg">
+  <script
+     type="text/ecmascript"
+     id="script17274">
+      
+      var svgPane = document.getElementById("svg_book");
+        var NS = "http://www.w3.org/2000/svg";
+      
+          <!-- LAYER-->       
+          MouseOverLayer = document.createElementNS(NS, "g");
+          MouseOverLayer.id = "layer0";
+          MouseOverLayer.setAttribute("fill", "green");
+          MouseOverLayer.setAttribute("style", "fill-opacity: .0");
+          PostLayer = document.createElementNS(NS, "g");
+          PostLayer.id = "layer1";
+      
+          PostLayer.setAttribute('onmouseover','removeQuickMenu(this.id);');
+          QuickActionOnPostLayer = document.createElementNS(NS, "g");
+          QuickActionOnPostLayer.setAttribute("id", "layer2");
+          BackgroundLayer = document.createElementNS(NS, "g");
+          
+            
+        <!--  var BackgroundPane = document.createElementNS(NS, "rect"); 
+          BackgroundPane.setAttribute("x", 0);
+          BackgroundPane.setAttribute("y", 90);
+          BackgroundPane.setAttribute("width", 600);
+          BackgroundPane.setAttribute("height", 160);
+          BackgroundPane.setAttribute("fill", "blue");
+          BackgroundLayer.setAttribute('onmouseover','removeQuickMenu(this.id);'); -->
+      
+      <!-- QuickActionOnPostLayer.setAttribute('onmouseover','removeQuickMenu(this.id);'); Highlight..-->
+          
+          <!-- VARIABLEN -->
+          var ButtonPost = []
+          var ButtonPost_Text = []
+          var ButtonPostMouseOver = []
+          var ButtonPostDelete = []
+      
+          var BPy=0;
+          var rC=0; <!-- removeCounter to position new elements correctly -->
+      
+      
+    function buttonEvent(event) {
+      
+      if ((event.type == &quot;click&quot; &amp;&amp; event.button == 0) ||
+          (event.type == &quot;keydown&quot; &amp;&amp;
+	  (event.keyCode == 32 || event.keyCode ==13))) {
+      
+          
+    var SVGDocument = event.target.ownerDocument;
+    <!-- Not needed atm  
+	var SVGRoot     = SVGDocument.documentElement;
+	var ButtonSend  = SVGDocument.getElementById(&quot;ButtonSEND&quot;);
+    var ButtonDelete  = SVGDocument.getElementById(&quot;ButtonDELETE&quot;);--> 
+    
+    var fill = &quot;none&quot;;  
+    <!-- 
+      Button for GDPR export data; move delete to individual ones
+      Maybe allow cloning/branches and locaization?
+      Allow SVG upload and reduce them (check for cascading nodes, links, etc.)
+      -->
+      
+        <!-- Create comment on click on element with id-->
+        if(event.target.id == "ButtonSEND" || event.target.id == "ButtonSEND_Text") 
+        {
+      
+           <!-- BUTTONS-->
+            
+           ButtonPost[BPy] = document.createElementNS(NS, "rect"); 
+           ButtonPost[BPy].setAttribute("id", BPy); <!-- Hack.. -->
+           ButtonPost[BPy].setAttribute('onclick','inputText(this.id);');
+           ButtonPost[BPy].setAttribute("x", 10);
+           ButtonPost[BPy].setAttribute("y", (BPy-rC)*170+100);
+           ButtonPost[BPy].setAttribute("ry", 40);
+           ButtonPost[BPy].setAttribute("width", 460);
+           ButtonPost[BPy].setAttribute("height", 160);
+           ButtonPost[BPy].setAttribute("fill", "black");
+        
+           <!-- BackgroundPane.setAttribute("height", BackgroundPane.getAttribute("height")+160); --> <!-- Increase background hover area; fix the infinite expansion later..-->
+      
+           ButtonPostMouseOver[BPy] = document.createElementNS(NS, "rect");
+           ButtonPostMouseOver[BPy].setAttribute("id", BPy); <!-- Hack.. -->
+           ButtonPostMouseOver[BPy].setAttribute('onclick','inputText(this.id);');
+           ButtonPostMouseOver[BPy].setAttribute('onmouseover','displayQuickMenu(this.id);');
+           ButtonPostMouseOver[BPy].setAttribute("x", 460-460/10);
+           ButtonPostMouseOver[BPy].setAttribute("y", (BPy-rC)*170+110);
+           ButtonPostMouseOver[BPy].setAttribute("width", 10+460/10);
+           ButtonPostMouseOver[BPy].setAttribute("height", 140);
+      
+           ButtonPostDelete[BPy] = document.createElementNS(NS, "rect"); <!-- Use clip-path later to cut it-->
+           ButtonPostDelete[BPy].setAttribute("id", BPy); <!-- Hack.. -->
+           ButtonPostDelete[BPy].setAttribute('onclick','removePost(this.id);');
+           ButtonPostDelete[BPy].setAttribute("x", 50);
+           ButtonPostDelete[BPy].setAttribute("y", (BPy-rC)*170+100);
+           ButtonPostDelete[BPy].setAttribute("ry", 40);
+           ButtonPostDelete[BPy].setAttribute("width", 460);
+           ButtonPostDelete[BPy].setAttribute("height", 160);
+           ButtonPostDelete[BPy].setAttribute("fill", "none");
+      
+            
+           <!-- TEXT-->
+
+           ButtonPost_Text[BPy] = document.createElementNS(NS, "text");
+           ButtonPost_Text[BPy].setAttribute("id", BPy); <!-- Hack.. -->
+           ButtonPost_Text[BPy].setAttribute('onclick','inputText(this.id);');
+           ButtonPost_Text[BPy].setAttribute("style", "font-size:32px;fill:#ffffff;font-family:DejaVu Sans");
+           ButtonPost_Text[BPy].setAttribute("x", 40);
+           ButtonPost_Text[BPy].setAttribute("y", (BPy-rC)*170+144.5);
+           ButtonPost_Text[BPy].textContent= ("Individual Text enter here.");
+            <!-- ButtonPost_Text[BPy].setAttribute("id", "BPT"+BPy); -->
+
+           <!-- PANE-->
+      
+           svgPane.appendChild(BackgroundLayer);
+           svgPane.appendChild(QuickActionOnPostLayer);
+           svgPane.appendChild(PostLayer);
+           svgPane.appendChild(MouseOverLayer);
+           
+           MouseOverLayer.appendChild(ButtonPostMouseOver[BPy]);
+           PostLayer.appendChild(ButtonPost[BPy]);
+           PostLayer.appendChild(ButtonPost_Text[BPy]);
+           QuickActionOnPostLayer.appendChild(ButtonPostDelete[BPy]);
+          <!-- BackgroundLayer.appendChild(BackgroundPane); -->
+      
+      
+          BPy=BPy+1;
+
+        }
+        <!-- Delete comment on click on button -->
+        else if <!--(ButtonPost[BPy-1].style.fill == "black" &amp;&amp; -->
+        ((event.target.id == "ButtonDELETE" || event.target.id == "ButtonDELETE_Text")  &amp;&amp; BPy>0)<!--) -->
+        {
+            
+            BPy=BPy-1;
+            ButtonPost[BPy].setAttribute("fill", "none");
+            ButtonPost_Text[BPy].textContent="";
+            ButtonPostMouseOver[BPy].setAttribute("fill", "none");
+            ButtonPostDelete[BPy].setAttribute("fill", "none");
+        }
+        
+      }
+    }
+      
+    function inputText(clicked_id)
+	{
+        <!-- alert(clicked_id); Very dumb hack.. -->
+		ButtonPost_Text[clicked_id].textContent = prompt("Please enter some text:");
+	}
+    function displayQuickMenu(hover_id)
+	{
+		ButtonPostDelete[hover_id].setAttribute("fill", "red");
+        ButtonPostMouseOver[hover_id].setAttribute("fill", "invisible");
+	}
+    function removeQuickMenu(hover_id)
+	{
+        for (const s of ButtonPostDelete) {
+            s.setAttribute("fill", "none");
+        }
+	}
+    function removePost(clicked_id)
+	{
+        ButtonPost[clicked_id].setAttribute("fill", "none");
+        ButtonPost_Text[clicked_id].textContent="";
+        ButtonPostMouseOver[clicked_id].setAttribute("fill", "none");
+        ButtonPostDelete[clicked_id].setAttribute("fill", "none");
+        
+        if(ButtonPost[clicked_id].getAttribute("fill") == "red") rC++; <!-- Maybe decrease array instead.. -->
+      
+        for (const s of ButtonPost) {
+            <!-- alert(s.id); -->
+            if(s.id>clicked_id) {
+                 <!--  s.setAttribute("style", "fill-opacity: .20"); -->
+                <!-- ButtonPost[BPy].setAttribute("id", BPy); --><!-- Hack.. -->
+               <!-- s.setAttribute('onclick','inputText(this.id);');-->
+                <!--s.setAttribute("y", s*170+100);-->
+                s.setAttribute("y", s.getAttribute("y")-170);
+                <!--s.setAttribute("y", s*170+100);
+                s.setAttribute("ry", 40);
+                s.setAttribute("width", 460);
+                s.setAttribute("height", 160);
+                s.setAttribute("fill", "black");-->
+                <!--ButtonPost[s-1]=ButtonPost[s];-->
+            }
+        }
+        for (const s of ButtonPost_Text) {
+            <!-- alert(s.id); -->
+            if(s.id>clicked_id) {
+                s.setAttribute("y", s.getAttribute("y")-170);
+            }
+        }
+        for (const s of ButtonPostMouseOver) {
+            <!-- alert(s.id); -->
+            if(s.id>clicked_id) {
+                s.setAttribute("y", s.getAttribute("y")-170);
+            }
+        }
+        for (const s of ButtonPostDelete) {
+            <!-- alert(s.id); -->
+            if(s.id>clicked_id) {
+                s.setAttribute("y", s.getAttribute("y")-170);
+            }
+        }
+	}
+      
+      function fucked() {
+      
+            var ButtonPost  = SVGDocument.getElementById(&quot;PostField&quot;);  
+
+            var fill = &quot;black&quot;;
+
+              var text = &quot;Individual Text enter here..&quot;;
+
+            ButtonPost.style.setProperty(&quot;fill&quot;, fill, &quot;&quot;);
+      }
+      
+      
+  </script>
+    
+  <g
+     id="layer1"
+     onkeydown="return buttonEvent(evt);"
+     onclick="return buttonEvent(evt);">
+    <rect width="220"
+       height="80"
+       ry="40"
+       x="10"
+       y="10"
+       id="ButtonSEND"
+       style="fill: green; stroke: none;" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;text-align:center;text-anchor:middle;fill:#ffffff;stroke:none;font-family:DejaVu Sans"><tspan
+         x="120"
+         y="64.5"
+         id="ButtonSEND_Text">SEND</tspan></text>
+      
+      
+    <rect width="220"
+       height="80"
+       ry="40"
+       x="250"
+       y="10"
+       id="ButtonDELETE"
+       style="fill: red; stroke: none;"/>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;text-align:center;text-anchor:middle;fill:#ffffff;stroke:none;font-family:DejaVu Sans"><tspan
+         x="360"
+         y="64.5"
+         id="ButtonDELETE_Text">DELETE</tspan></text>
+      
+      
+      
+      <!--Maybe x="30".. Add char limit to 20 chars/line and maximum 80 or 100 chars. Also copy current text to js input popup field  -->
+    <text
+       xml:space="preserve"
+       style="font-size:32px;fill:#ffffff;font-family:DejaVu Sans"><tspan
+         x="40" 
+         y="144.5"
+         id="PostField_Text"></tspan></text>
+ 
+      <!-- Doesn't work without html>
+    <foreignobject class="node" x="100" y="500" width="100" height="100">
+       <div contenteditable="true">
+       <svg>
+       <text          x="360"
+         y="64.5"id="Username" class="cls-7" transform="translate(142 20)"><tspan x="0" y="0">Username</tspan></text>
+       </svg>
+       </div>    
+    </foreignobject>
+-->
+      
+    <!-- Textbox replacement.. or work with keypress detection and print to new one (half-transparent preview) 
+    <svg:g 
+             id="layer2"
+             transform="translate(100,100)">
+        <svg:text contentEditable="true">foo</svg:text>
+    </svg:g>
+      -->
+      
+  </g>
+  <script />
+</svg>
